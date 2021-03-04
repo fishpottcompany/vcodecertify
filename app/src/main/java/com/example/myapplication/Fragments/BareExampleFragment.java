@@ -140,4 +140,5 @@ public class BareExampleFragment extends VCodeScanFragment
         Log.e("BareFragVcode", "onDecodeStopped: ");
     }
 
+    
 }
