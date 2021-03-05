@@ -29,7 +29,13 @@ public class MainActivity extends AppCompatActivity
         transaction.add(fragmentContainerId, newFragment, fragmentName).commit();
     }
 
-    /*
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+/*
     @Override
     public void onFoundUTI(@NonNull String s, @NonNull RectF rectF) {
         Log.e("MainActVCode", "onFoundUTI: " + s);

@@ -6,18 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.myapplication.BuildConfig;
 import com.example.myapplication.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 
 public class FinalActivity extends AppCompatActivity {
 
@@ -29,7 +34,7 @@ public class FinalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final);
 
-        String vcode = getIntent().getStringExtra("VCODE");
+        final String vcode = getIntent().getStringExtra("VCODE");
 
         resultsImageView = findViewById(R.id.doc);
         correctOrWrongResultsImageView = findViewById(R.id.validicon);
@@ -64,58 +69,32 @@ public class FinalActivity extends AppCompatActivity {
             labelResultsTextView.setText("Warning");
             resultsTextView.setText("This VCODE is not valid");
             resultsTextView.setTextColor(getColor(R.color.colorRed));
+            viewFileTextView.setVisibility(View.GONE);
         } else if(vcode.equalsIgnoreCase("2800024050008104")){
-            resultsImageView.setImageResource(R.drawable.pdf);
+            resultsImageView.setImageResource(R.drawable.cert);
             correctOrWrongResultsImageView.setImageResource(R.drawable.ic_protection);
-            labelResultsTextView.setText("Certicate");
+            labelResultsTextView.setText("Certificate");
             resultsTextView.setText("Issued to Bilal Farooq \n\nMBA from International Islamic University");
             resultsTextView.setTextColor(getColor(R.color.colorPrimaryDark));
+            viewFileTextView.setVisibility(View.VISIBLE);
+            viewFileTextView.setText("12 March 2005");
         } else if(vcode.equalsIgnoreCase("08010a204060c804")){
-            resultsImageView.setImageResource(R.drawable.pdf);
+            resultsImageView.setImageResource(R.drawable.cert);
             correctOrWrongResultsImageView.setImageResource(R.drawable.ic_protection);
-            labelResultsTextView.setText("Certicate");
+            labelResultsTextView.setText("Certificate");
             resultsTextView.setText("Issued issued to Bilal Farooq \n\nMS in Management Sciences from International Islamic University");
             resultsTextView.setTextColor(getColor(R.color.colorPrimaryDark));
+            viewFileTextView.setVisibility(View.VISIBLE);
+            viewFileTextView.setText("19th October 2020");
         } else {
             resultsImageView.setImageResource(R.drawable.que);
             correctOrWrongResultsImageView.setImageResource(R.drawable.ic_wrong);
             labelResultsTextView.setText("Warning");
             resultsTextView.setText("This VCODE is not valid");
             resultsTextView.setTextColor(getColor(R.color.colorRed));
+            viewFileTextView.setVisibility(View.GONE);
         }
         Log.e("BareFragVcode", "vcode: " + vcode);
     }
-    private void openPDFFiles() {
-        AssetManager assetManager = getAssets();
 
-        InputStream in = null;
-        OutputStream out = null;
-        File file = new File(getFilesDir(), "cert1.pdf");//here schedule1.pdf is the pdf file name which is keep in assets folder.
-        try {
-            in = assetManager.open("cert1.pdf");
-            out = openFileOutput(file.getName(), Context.MODE_WORLD_READABLE);
-
-            copyFile(in, out);
-            in.close();
-            in = null;
-            out.flush();
-            out.close();
-            out = null;
-        } catch (Exception e) {
-            Log.e("PDFOPENDER", e.getMessage());
-        }
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse("file://" + getFilesDir() + "/schedule1.pdf"), "application/pdf");
-
-        startActivity(intent);
-    }
-
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
-        }
-    }
 }
